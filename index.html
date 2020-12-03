@@ -26,7 +26,7 @@
             <div class="wrapper wrap2">
                 <h2>Active Word</h2>
                 <hr>
-                <!--<button id="randomWord" class="button is-primary" onclick="getRandWord()">Get random word</button>-->
+                <div id="active-word-container"></div>
             </div>
             <div class="wrapper wrap3" id="team-results">
                 <h2>Results</h2>
@@ -55,111 +55,12 @@
         </div>
     </main>
 
-    <script>
-        const addItems = document.querySelector('.add-items');
-        const itemsList = document.querySelector('.words');
-        let items = JSON.parse(localStorage.getItem('items')) || [];  
-        const randButton = document.querySelector('#randomWord');
-        const activeWord = document.querySelector('#activeWord');
-        const activeWordDiv = document.querySelector('.wrap2');
-        const teamRedresults = document.querySelector('#red-res')
-        const teamBlueresults = document.querySelector('#blue-res')
 
-        let allWords = []
-
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-
-
-        function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-        }
-
-
-        function drop(ev) {
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            ev.target.appendChild(document.getElementById(data));
-        }
-
-    
-        function addItem(e) {
-            e.preventDefault();
-            const item = (this.querySelector('[name=item]')).value;
-            items.push(item);
-            allWords.push(item);
-            console.log(items)
-            populateList(items, itemsList);
-            localStorage.setItem('items', JSON.stringify(items));
-            this.reset();
-        }
-
-        function resetWords(){
-            try{
-                teamRedresults.innerHTML = '';
-            }
-            catch{}
-            try{
-                teamBlueresults.innerHTML = '';
-            }
-            catch{}
-            try{
-                document.querySelector('.active-word-container').innerHTML = '';
-            }
-            catch{}
-            items = allWords;
-            populateList(items, itemsList);
-        }
-
-        function clearWords(){
-            try{
-                teamRedresults.innerHTML = '';
-            }
-            catch{}
-            try{
-                teamBlueresults.innerHTML = '';
-            }   
-            catch{}
-            try{
-                document.querySelector('.active-word-container').innerHTML = '';
-            }
-            catch{}
-            items = []
-            allWords = []
-            localStorage.clear();
-            populateList(items, itemsList);
-        }
-
-
-        function populateList(items = [], wordList) {
-            wordList.innerHTML = items.map((item, i) => {
-                return `
-                <li>
-                    <p data-index=${i} id="item${i}">${item}</p>
-                </li>
-                `;
-            }).join('');
-        }
-
-
-        function getRandWord(){
-            console.log('test')
-            var item = items[Math.floor(Math.random() * items.length)];
-            var index = items.indexOf(item);
-                if (index !== -1) {
-                    items.splice(index, 1);
-                }
-            activeWordDiv.innerHTML += `<p id="activeWord-${item}" class="active-word-container" draggable="true" ondragstart="drag(event)" >${item}</p>`
-            populateList(items, itemsList);
-        }
-
-        addItems.addEventListener('submit', addItem);
-        //randButton.addEventListener('click', getRandWord)
-
-
-        populateList(items, itemsList);
-</script>
-    
+    <script src="code.js" async defer></script>
 </body>
 </html>
+
+
+
+
+
