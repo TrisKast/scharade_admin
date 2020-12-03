@@ -96,8 +96,14 @@
         }
 
         function resetWords(){
-            teamRedresults.innerHTML = '';
-            teamBlueresults.innerHTML = '';
+            try{
+                teamRedresults.innerHTML = '';
+            }
+            catch{}
+            try{
+                teamBlueresults.innerHTML = '';
+            }
+            catch{}
             try{
                 document.querySelector('.active-word-container').innerHTML = '';
             }
@@ -107,15 +113,21 @@
         }
 
         function clearWords(){
-            teamRedresults.innerHTML = '';
-            teamBlueresults.innerHTML = '';
+            try{
+                teamRedresults.innerHTML = '';
+            }
+            catch{}
+            try{
+                teamBlueresults.innerHTML = '';
+            }   
+            catch{}
             try{
                 document.querySelector('.active-word-container').innerHTML = '';
             }
             catch{}
             items = []
             allWords = []
-            localStorage.setItem('items', '');
+            localStorage.clear();
             populateList(items, itemsList);
         }
 
