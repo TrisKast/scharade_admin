@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <div class="main-row">
+            <div class="main-field">
+            <div class="wrapper wrap1">
+                <h2>Word Pool</h2>
+                <hr>
+                <ul class="words">
+                <li>Loading Words...</li>
+                </ul>
+                <form class="add-items">
+                <input type="text" name="item" placeholder="Item Name" required>
+                <input type="submit" value="+ Add Item">
+                </form>
+            </div>
+            <div class="wrapper wrap2">
+                <h2>Active Word</h2>
+                <hr>
+                <!--<button id="randomWord" class="button is-primary" onclick="getRandWord()">Get random word</button>-->
+            </div>
+            <div class="wrapper wrap3" id="team-results">
+                <h2>Results</h2>
+                <hr>
+                <div class="wrapper" id="blue-res" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+                </div>
+                <div class="wrapper" id="red-res" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    
+                </div>
+            </div>
+            </div>
+            <div class="sec-field">
+                <div class="wrapper" style="visibility: hidden;">
+
+                </div>
+                <div class="wrapper lower-wrapper">
+                    <button id="randomWord2" class="button is-primary" onclick="getRandWord()">Get random word</button>
+                </div>
+                <div class="wrapper lower-wrapper">
+                    <button id="resetButton" class="button is-warning" onclick="resetWords()">Next Round</button>
+                    <button id="clearButton" class="button is-danger" onclick="clearWords()">New Game</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const addItems = document.querySelector('.add-items');
+        const itemsList = document.querySelector('.words');
+        let items = JSON.parse(localStorage.getItem('items')) || [];  
+        const randButton = document.querySelector('#randomWord');
+        const activeWord = document.querySelector('#activeWord');
+        const activeWordDiv = document.querySelector('.wrap2');
+        const teamRedresults = document.querySelector('#red-res')
+        const teamBlueresults = document.querySelector('#blue-res')
+
+        let allWords = []
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+        }
+
+    
+        function addItem(e) {
+            e.preventDefault();
+            const item = (this.querySelector('[name=item]')).value;
+            items.push(item);
+            allWords.push(item);
+            console.log(items)
+            populateList(items, itemsList);
+            localStorage.setItem('items', JSON.stringify(items));
+            this.reset();
+        }
+
+        function resetWords(){
+            teamRedresults.innerHTML = '';
+            teamBlueresults.innerHTML = '';
+            try{
+                document.querySelector('.active-word-container').innerHTML = '';
+            }
+            catch{}
+            items = allWords;
+            populateList(items, itemsList);
+        }
+
+        function clearWords(){
+            teamRedresults.innerHTML = '';
+            teamBlueresults.innerHTML = '';
+            try{
+                document.querySelector('.active-word-container').innerHTML = '';
+            }
+            catch{}
+            items = []
+            allWords = []
+            localStorage.setItem('items', '');
+            populateList(items, itemsList);
+        }
+
+
+        function populateList(items = [], wordList) {
+            wordList.innerHTML = items.map((item, i) => {
+                return `
+                <li>
+                    <p data-index=${i} id="item${i}">${item}</p>
+                </li>
+                `;
+            }).join('');
+        }
+
+
+        function getRandWord(){
+            console.log('test')
+            var item = items[Math.floor(Math.random() * items.length)];
+            var index = items.indexOf(item);
+                if (index !== -1) {
+                    items.splice(index, 1);
+                }
+            activeWordDiv.innerHTML += `<p id="activeWord-${item}" class="active-word-container" draggable="true" ondragstart="drag(event)" >${item}</p>`
+            populateList(items, itemsList);
+        }
+
+        addItems.addEventListener('submit', addItem);
+        //randButton.addEventListener('click', getRandWord)
+
+
+        populateList(items, itemsList);
+</script>
+    
+</body>
+</html>
